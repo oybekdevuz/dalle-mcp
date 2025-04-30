@@ -1,0 +1,148 @@
+{
+  "jsonrpc": "2.0",
+  "list": [
+    {
+      "name": "generate_image",
+      "description": "Generate an image using DALL-E based on a text prompt",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text description of the desired image"
+          },
+          "model": {
+            "type": "string",
+            "description": "DALL-E model to use (dall-e-2 or dall-e-3)",
+            "enum": ["dall-e-2", "dall-e-3"]
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the generated image",
+            "enum": [
+              "256x256",
+              "512x512",
+              "1024x1024",
+              "1792x1024",
+              "1024x1792"
+            ]
+          },
+          "quality": {
+            "type": "string",
+            "description": "Quality of the generated image (dall-e-3 only)",
+            "enum": ["standard", "hd"]
+          },
+          "style": {
+            "type": "string",
+            "description": "Style of the generated image (dall-e-3 only)",
+            "enum": ["vivid", "natural"]
+          },
+          "n": {
+            "type": "number",
+            "description": "Number of images to generate (1-10)",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "saveDir": {
+            "type": "string",
+            "description": "Directory to save the generated images"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Base filename for the generated images (without extension)"
+          }
+        },
+        "required": ["prompt"]
+      }
+    },
+    {
+      "name": "edit_image",
+      "description": "Edit an existing image using DALL-E based on a text prompt",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text description of the desired edits"
+          },
+          "imagePath": {
+            "type": "string",
+            "description": "Path to the image to edit"
+          },
+          "mask": {
+            "type": "string",
+            "description": "Path to the mask image (white areas will be edited, black areas preserved)"
+          },
+          "model": {
+            "type": "string",
+            "description": "DALL-E model to use (currently only dall-e-2 supports editing)",
+            "enum": ["dall-e-2"]
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the generated image",
+            "enum": ["256x256", "512x512", "1024x1024"]
+          },
+          "n": {
+            "type": "number",
+            "description": "Number of images to generate (1-10)",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "saveDir": {
+            "type": "string",
+            "description": "Directory to save the edited images"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Base filename for the edited images (without extension)"
+          }
+        },
+        "required": ["prompt", "imagePath"]
+      }
+    },
+    {
+      "name": "create_variation",
+      "description": "Create variations of an existing image using DALL-E",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "imagePath": {
+            "type": "string",
+            "description": "Path to the image to create variations of"
+          },
+          "model": {
+            "type": "string",
+            "description": "DALL-E model to use (currently only dall-e-2 supports variations)",
+            "enum": ["dall-e-2"]
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the generated image",
+            "enum": ["256x256", "512x512", "1024x1024"]
+          },
+          "n": {
+            "type": "number",
+            "description": "Number of variations to generate (1-10)",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "saveDir": {
+            "type": "string",
+            "description": "Directory to save the variation images"
+          },
+          "fileName": {
+            "type": "string",
+            "description": "Base filename for the variation images (without extension)"
+          }
+        },
+        "required": ["imagePath"]
+      }
+    },
+    {
+      "name": "validate_key",
+      "description": "Validate the OpenAI API key",
+      "inputSchema": { "type": "object", "properties": {}, "required": [] }
+    }
+  ]
+}
