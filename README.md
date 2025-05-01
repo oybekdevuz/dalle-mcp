@@ -96,7 +96,7 @@ Parameters:
 - `model` (optional): DALL-E model to use ("dall-e-2" or "dall-e-3", default: "dall-e-3")
 - `size` (optional): Size of the generated image (default: "1024x1024")
   - DALL-E 3: "1024x1024", "1792x1024", or "1024x1792"
-  - DALL-E 2: "256x256", "512x512", or "1024x1024"
+  - DALL-E 2: "256x256", "1024x1024", or "1024x1024"
 - `quality` (optional): Quality of the generated image, DALL-E 3 only ("standard" or "hd", default: "standard")
 - `style` (optional): Style of the generated image, DALL-E 3 only ("vivid" or "natural", default: "vivid")
 - `n` (optional): Number of images to generate (1-10, default: 1)

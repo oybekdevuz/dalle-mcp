@@ -1,6 +1,8 @@
 export interface ToolContent {
   type: "text";
   text: string;
+  path?: string;
+  status: number;
 }
 
 export interface ToolResponse {
@@ -10,13 +12,7 @@ export interface ToolResponse {
 
 export interface GenerateImageArgs {
   prompt: string;
-  model?: string;
-  size?: string;
-  quality?: string;
-  style?: string;
-  n?: number;
   saveDir?: string;
-  fileName?: string;
 }
 
 export interface EditImageArgs {

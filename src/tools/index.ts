@@ -24,59 +24,24 @@ export const tools = [
           type: "string",
           description: "Text description of the desired image"
         },
-        model: {
-          type: "string",
-          description: "DALL-E model to use (dall-e-2 or dall-e-3)",
-          enum: ["dall-e-2", "dall-e-3"]
-        },
-        size: {
-          type: "string",
-          description: "Size of the generated image",
-          enum: ["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"]
-        },
-        quality: {
-          type: "string",
-          description: "Quality of the generated image (dall-e-3 only)",
-          enum: ["standard", "hd"]
-        },
-        style: {
-          type: "string",
-          description: "Style of the generated image (dall-e-3 only)",
-          enum: ["vivid", "natural"]
-        },
-        n: {
-          type: "number",
-          description: "Number of images to generate (1-10)",
-          minimum: 1,
-          maximum: 10
-        },
         saveDir: {
           type: "string",
           description: "Directory to save the generated images"
         },
-        fileName: {
-          type: "string",
-          description: "Base filename for the generated images (without extension)"
-        }
       },
       required: ["prompt"]
     },
     handler: async (args: GenerateImageArgs): Promise<ToolResponse> => {
       const result = await dalleService.generateImage(args.prompt, {
-        model: args.model,
-        size: args.size,
-        quality: args.quality,
-        style: args.style,
-        n: args.n,
         saveDir: args.saveDir,
-        fileName: args.fileName
       });
 
       if (!result.success) {
         return {
           content: [{
             type: "text",
-            text: `Error generating image: ${result.error}`
+            text: `Error generating image: ${result.error}`,
+            status: 200
           }]
         };
       }
@@ -89,14 +54,13 @@ export const tools = [
       responseText += `Prompt: "${result.prompt}"\n\n`;
       responseText += `Image${imageCount !== 1 ? 's' : ''} saved to:\n`;
       
-      imagePaths.forEach(imagePath => {
-        responseText += `- ${imagePath}\n`;
-      });
 
       return {
         content: [{
           type: "text",
-          text: responseText
+          text: responseText,
+          path: imagePaths[0],
+          status: 200
         }]
       };
     }
@@ -127,7 +91,7 @@ export const tools = [
         size: {
           type: "string",
           description: "Size of the generated image",
-          enum: ["256x256", "512x512", "1024x1024"]
+          enum: ["256x256", "1024x1024", "1024x1024"]
         },
         n: {
           type: "number",
@@ -169,7 +133,8 @@ export const tools = [
         return {
           content: [{
             type: "text",
-            text: `Error editing image: ${result.error}`
+            text: `Error editing image: ${result.error}`,
+            status: 500
           }]
         };
       }
@@ -193,7 +158,9 @@ export const tools = [
       return {
         content: [{
           type: "text",
-          text: responseText
+          text: responseText,
+          path: imagePaths[0],
+          status: 200
         }]
       };
     }
@@ -216,7 +183,7 @@ export const tools = [
         size: {
           type: "string",
           description: "Size of the generated image",
-          enum: ["256x256", "512x512", "1024x1024"]
+          enum: ["256x256", "1024x1024", "1024x1024"]
         },
         n: {
           type: "number",
@@ -253,7 +220,8 @@ export const tools = [
         return {
           content: [{
             type: "text",
-            text: `Error creating image variations: ${result.error}`
+            text: `Error creating image variations: ${result.error}`,
+            status: 500
           }]
         };
       }
@@ -273,7 +241,8 @@ export const tools = [
       return {
         content: [{
           type: "text",
-          text: responseText
+          text: responseText,
+          status: 200
         }]
       };
     }
@@ -291,7 +260,8 @@ export const tools = [
       return {
         content: [{
           type: "text",
-          text: isValid ? "API key is valid" : "API key is invalid"
+          text: isValid ? "API key is valid" : "API key is invalid",
+          status: 500
         }]
       };
     }
