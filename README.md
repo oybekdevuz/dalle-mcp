@@ -1,4 +1,4 @@
-# DALL-E MCP Server
+# DALL-E MCP Server running on port
 
 <img src="assets/dall-e-logo.png" alt="DALL-E MCP Logo" width="256" height="256">
 
@@ -15,7 +15,7 @@ An MCP (Model Context Protocol) server for generating images using OpenAI's DALL
 
 ```bash
 # Clone the repository
-git clone https://github.com/Garoth/dalle-mcp.git
+git clone https://github.com/oybekdevuz/dalle-mcp.git
 cd dalle-mcp
 
 # Install dependencies
@@ -23,6 +23,15 @@ npm install
 
 # Build the project
 npm run build
+```
+
+## Usage
+
+### Running the Server
+
+```bash
+# Run the server
+npm start
 ```
 
 ## Important Note for Cline Users
@@ -33,44 +42,46 @@ Example usage with Cline:
 ```json
 {
   "prompt": "A tropical beach at sunset",
-  "saveDir": "/path/to/current/workspace"
+  "saveDir": "/path/to/where-want-to/save/image"
 }
-```
-
-
-## Usage
-
-### Running the Server
-
-```bash
-# Run the server
-node build/index.js
 ```
 
 ### Configuration for Cline
 
-Add the dall-e server to your Cline MCP settings file inside VSCode's settings (ex. ~/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json):
+```import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { McpName } from "src/enum/McpName";
 
-```json
-{
-  "mcpServers": {
-    "dalle-mcp": {
-      "command": "node",
-      "args": ["/path/to/dalle-mcp-server/build/index.js"],
-      "env": {
-        "OPENAI_API_KEY": "your-api-key-here",
-        "SAVE_DIR": "/path/to/save/directory"
-      },
-      "disabled": false,
-      "autoApprove": []
-    }
+async function setupClient() {
+  let client: any = undefined;
+  const baseUrl: any = "http://127.0.0.1:3002/mcp";
+
+  try {
+    client = new Client({
+      name: 'streamable-http-client',
+      version: '1.0.0'
+    });
+    const transport = new StreamableHTTPClientTransport(new URL(baseUrl) as any);
+    await client.connect(transport);
+    console.log("Connected using Streamable HTTP transport");
+  } catch (error) {
+    console.log("Streamable HTTP connection failed, falling back to SSE transport");
+    client = new Client({
+      name: 'dalle-image-generator',
+      version: '1.0.0'
+    });
+    const sseTransport = new SSEClientTransport(baseUrl);
+    await client.connect(sseTransport);
+    console.log("Connected using SSE transport");
   }
 }
+
+setupClient()
 ```
 
 Make sure to:
-1. Replace `/path/to/dalle-mcp-server/build/index.js` with the actual path to the built index.js file
-2. Replace `your-api-key-here` with your OpenAI API key
+1. Replace `your-api-key-here` with your OpenAI API key
 
 ### Available Tools
 
@@ -81,13 +92,7 @@ Generate an image using DALL-E based on a text prompt.
 ```json
 {
   "prompt": "A futuristic city with flying cars and neon lights",
-  "model": "dall-e-3",
-  "size": "1024x1024",
-  "quality": "standard",
-  "style": "vivid",
-  "n": 1,
   "saveDir": "/path/to/save/directory",
-  "fileName": "futuristic-city"
 }
 ```
 
@@ -96,7 +101,7 @@ Parameters:
 - `model` (optional): DALL-E model to use ("dall-e-2" or "dall-e-3", default: "dall-e-3")
 - `size` (optional): Size of the generated image (default: "1024x1024")
   - DALL-E 3: "1024x1024", "1792x1024", or "1024x1792"
-  - DALL-E 2: "256x256", "1024x1024", or "1024x1024"
+  - DALL-E 2: "256x256", or "1024x1024"
 - `quality` (optional): Quality of the generated image, DALL-E 3 only ("standard" or "hd", default: "standard")
 - `style` (optional): Style of the generated image, DALL-E 3 only ("vivid" or "natural", default: "vivid")
 - `n` (optional): Number of images to generate (1-10, default: 1)
@@ -186,35 +191,8 @@ For normal operation with Cline, configure your API key in the MCP settings JSON
 
 You can get your API key from [OpenAI's API Keys page](https://platform.openai.com/api-keys).
 
-### Running Tests
-
-```bash
-# Run basic tests
-npm test
-
-# Run all tests including edit and variation tests
-npm run test:all
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run specific test by name
-npm run test:name "should validate API key"
-```
-
-Note: Tests use real API calls and may incur charges on your OpenAI account.
-
-### Generating Test Images
-
-The project includes a script to generate test images for development and testing:
-
-```bash
-# Generate a test image in the assets directory
-npm run generate-test-image
-  ```
-
-This will create a simple test image in the `assets` directory that can be used for testing the edit and variation features.
 
 ## License
+Updated to http server mcp.
 
-MIT
+Original repository is https://github.com/Garoth/dalle-mcp

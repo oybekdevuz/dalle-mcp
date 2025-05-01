@@ -91,7 +91,7 @@ export const tools = [
         size: {
           type: "string",
           description: "Size of the generated image",
-          enum: ["256x256", "1024x1024", "1024x1024"]
+          enum: ["256x256", "1024x1024"]
         },
         n: {
           type: "number",
@@ -183,7 +183,7 @@ export const tools = [
         size: {
           type: "string",
           description: "Size of the generated image",
-          enum: ["256x256", "1024x1024", "1024x1024"]
+          enum: ["256x256", "1024x1024"]
         },
         n: {
           type: "number",

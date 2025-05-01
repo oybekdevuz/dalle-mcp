@@ -19,7 +19,7 @@ import { Tool, ToolResponse, GenerateImageArgs, EditImageArgs, VariationArgs, Va
 const app = express();
 app.use(express.json());
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 
 // Server yaratish funksiyasi
 const getServer = () =>
