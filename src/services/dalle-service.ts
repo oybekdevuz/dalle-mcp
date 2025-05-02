@@ -166,6 +166,7 @@ export class DalleService {
       formData.append('n', n.toString());
       formData.append('size', size);
       formData.append('response_format', 'b64_json');
+      formData.append('model', model);
 
       // Read image file and append to form
       const imageBuffer = await fs.readFile(imagePath);
@@ -182,14 +183,15 @@ export class DalleService {
           contentType: 'image/png'
         });
       }
-
+      console.log(formData);
+      
       // Make request to OpenAI API
       const response = await axios.post(
         `${this.baseUrl}/images/edits`,
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            ...formData.getHeaders(),
             'Authorization': `Bearer ${this.config.apiKey}`
           }
         }
